@@ -1,6 +1,11 @@
 {
-  "extends": ["airbnb", "prettier", "prettier/react"],
-  "plugins": ["prettier"],
+  "extends": [
+    "airbnb",
+    "prettier"
+  ],
+  "plugins": [
+    "prettier"
+  ],
   "env": {
     "browser": true,
     "es6": true
@@ -9,28 +14,63 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".jsx"]
+        "extensions": [
+          ".js",
+          ".jsx"
+        ]
       }
     ],
     "no-console": 1,
-    "no-unused-vars": ["warn", { "args": "all", "argsIgnorePattern": "^resp" }],
-    "no-shadow": [2, { "allow": ["response"] }],
+    "no-unused-vars": [
+      "warn",
+      {
+        "args": "all",
+        "argsIgnorePattern": "^resp"
+      }
+    ],
+    "no-shadow": [
+      2,
+      {
+        "allow": [
+          "response"
+        ]
+      }
+    ],
     "react/prop-types": 0,
     "no-underscore-dangle": 0,
-    "import/imports-first": ["error", "absolute-first"],
+    "import/imports-first": [
+      "error",
+      "absolute-first"
+    ],
     "import/newline-after-import": "error",
     "jsx-a11y/label-has-for": [
       1,
       {
-        "components": ["Label"],
+        "components": [
+          "Label"
+        ],
         "required": {
-          "every": ["nesting", "id"]
+          "every": [
+            "nesting",
+            "id"
+          ]
         },
         "allowChildren": false
       }
     ],
-    "no-bitwise": ["error", { "allow": ["~"] }],
-    "import/no-extraneous-dependencies": [error, { "devDependencies": true }],
+    "no-bitwise": [
+      "error",
+      {
+        "allow": [
+          "~"
+        ]
+      }
+    ],
+    "import/no-extraneous-dependencies": [error,
+      {
+        "devDependencies": true
+      }
+    ],
     "react/jsx-props-no-spreading": 0,
   },
   "globals": {
@@ -48,15 +88,32 @@
     "expect": "readonly"
   },
   "settings": {
-    "import/resolver" : {
-      "alias" : {
-        "map" : [
-          ["configurations", "./src/configurations"],
-          ["utils", "./src/utils"],
-          ["components", "./src/components"],
-          ["globals", "./src/globals"],
+    "import/resolver": {
+      "alias": {
+        "map": [
+          [
+            "configurations",
+            "./src/configurations"
+          ],
+          [
+            "utils",
+            "./src/utils"
+          ],
+          [
+            "components",
+            "./src/components"
+          ],
+          [
+            "globals",
+            "./src/globals"
+          ],
         ],
-        "extensions": [".js", ".jsx",  ".scss", ".react.js"],
+        "extensions": [
+          ".js",
+          ".jsx",
+          ".scss",
+          ".react.js"
+        ],
       }
     }
   },

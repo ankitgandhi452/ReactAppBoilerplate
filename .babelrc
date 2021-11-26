@@ -2,16 +2,16 @@
   "presets": [
     "@babel/preset-env",
     "@babel/preset-react",
-    "react-app",
-    // [
-    //   "minify",
-    //   {
-    //     "builtIns": false
-    //   }
-    // ]
+    "react-app"
   ],
   "plugins": [
     "@babel/plugin-syntax-dynamic-import",
-    "lodash"
+    "lodash",
+    [
+      "@babel/plugin-proposal-private-methods",
+      {
+        "loose": true
+      }
+    ]
   ]
 }

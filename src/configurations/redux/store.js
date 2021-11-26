@@ -9,9 +9,9 @@ import { encryptTransform } from 'redux-persist-transform-encrypt'
 import combinedReducer from './reducers'
 
 const persistStorage = localForage
-const isPresistanceRequired = true
+const isPresistanceRequired = false
 const apiInstance = new Api()
-const isDev = process.env.NODE_ENV === 'development'
+const isDev = true
 const compressor = createCompressor({})
 const encryptor = encryptTransform({
   secretKey: 'ReactApp',
@@ -52,57 +52,53 @@ const persistor = persistStore(store, {}, () => {
   console.log('ReactApp store rehydrate done')
 })
 
-const purgeData = () => {
-  return new Promise((resolve, reject) => {
+const purgeData = () =>
+  new Promise((resolve, reject) => {
     persistor
       .purge()
       .then(res => {
         resolve(true)
       })
-      .catch(err => {
-        reject(new Error(false))
-      })
+      .catch(err =>
+        reject(err)
+      )
   })
-}
 
-const flushData = () => {
-  return new Promise((resolve, reject) => {
+const flushData = () =>
+  new Promise((resolve, reject) => {
     persistor
       .flush()
       .then(res => {
         resolve(true)
       })
-      .catch(err => {
-        reject(new Error(false))
-      })
+      .catch(err =>
+        reject(err)
+      )
   })
-}
 
-const pausePersistance = () => {
-  return new Promise((resolve, reject) => {
+const pausePersistance = () =>
+  new Promise((resolve, reject) => {
     persistor
       .pause()
       .then(res => {
         resolve(true)
       })
-      .catch(err => {
-        reject(new Error(false))
-      })
+      .catch(err =>
+        reject(err)
+      )
   })
-}
 
-const persistData = () => {
-  return new Promise((resolve, reject) => {
+const persistData = () =>
+  new Promise((resolve, reject) => {
     persistor
       .persist()
       .then(res => {
         resolve(true)
       })
-      .catch(err => {
-        reject(new Error(false))
-      })
+      .catch(err =>
+        reject(err)
+      )
   })
-}
 
 if (isDev) {
   window.persistor = persistor

@@ -6,7 +6,7 @@
   "scripts": {
     "analyze": "npm run build && source-map-explorer 'build/*.js'",
     "prebuild": "npm run build:clean",
-    "build": "npm run build:clean && cross-env NODE_ENV=production BROWSERSLIST_ENV=production webpack --config config/webpack.production.config.js --color -p --progress --hide-modules --display-optimization-bailout",
+    "build": "npm run build:clean && cross-env NODE_ENV=production BROWSERSLIST_ENV=production webpack --config config/webpack.production.config.js --color --progress --stats-error-details",
     "build:clean": "rimraf ./build",
     "start": "cross-env NODE_ENV=development BROWSERSLIST_ENV=development node server",
     "start:prod": "cross-env NODE_ENV=production BROWSERSLIST_ENV=production node server",
@@ -55,7 +55,6 @@
     "babel-minify-webpack-plugin": "^0.3.1",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-preset-minify": "^0.5.1",
     "babel-preset-react-app": "^10.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "chalk": "^4.1.1",

@@ -1,10 +1,6 @@
-import React, { Suspense } from 'react';
+import React, { lazy } from 'react'
 
-const LoginContainer = React.lazy(() =>
-  import(
-    'components/Login/Login.Container' /* webpackChunkName: "Login.Container" */
-  ),
-);
+const LoginContainer = lazy(() => import('components/Login/Login.Container'))
 
 const appRoutes = {
   root: {
@@ -12,34 +8,34 @@ const appRoutes = {
       path: '/',
       component: LoginContainer,
       needAuth: true,
-      exact: true,
-    },
+      exact: true
+    }
   },
   authentication: {
     login: {
       path: '/login',
       component: LoginContainer,
       needAuth: false,
-      exact: false,
-    },
-  },
-};
+      exact: false
+    }
+  }
+}
 
-const defaultAuthenticatedRoute = '/';
-const defaultUnauthenticatedRoute = '/login';
+const defaultAuthenticatedRoute = '/'
+const defaultUnauthenticatedRoute = '/login'
 
 const getAllRoutesArray = () =>
   Object.keys(appRoutes)
     .map(key =>
       Object.keys(appRoutes[key]).reduce((allRoutes, innerKey) => {
-        allRoutes.push(appRoutes[key][innerKey]);
-        return allRoutes;
-      }, []),
+        allRoutes.push(appRoutes[key][innerKey])
+        return allRoutes
+      }, [])
     )
-    .flat();
+    .flat()
 export {
   appRoutes,
   defaultAuthenticatedRoute,
   defaultUnauthenticatedRoute,
-  getAllRoutesArray,
-};
+  getAllRoutesArray
+}

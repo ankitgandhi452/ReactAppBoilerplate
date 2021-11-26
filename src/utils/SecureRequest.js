@@ -1,50 +1,48 @@
 const SecureRequest = () => {
-  let tokenData = null;
-  const responseTokenKey = 'accessToken';
-  const requestTokenKey = 'accessToken';
+  let tokenData = null
+  const responseTokenKey = 'accessToken'
+  const requestTokenKey = 'accessToken'
 
-  const getAccessToken = () => {
-    return tokenData;
-  };
+  const getAccessToken = () => tokenData
 
   const storeAccessToken = response => {
     if (response && response.headers) {
       tokenData = {
         // Replace with the key
-        [requestTokenKey]: response.headers[responseTokenKey],
-      };
+        [requestTokenKey]: response.headers[responseTokenKey]
+      }
     }
-  };
+  }
 
   const getSecureAuthRequest = unsecuredRequest => {
     // mutate the reuest to pass auth data
-    const accessToken = getAccessToken();
+    const accessToken = getAccessToken()
     // Implement Encryption Algo
     const securedRequest = {
-      ...unsecuredRequest,
-    };
+      ...unsecuredRequest
+    }
     return {
       ...securedRequest,
       headers: {
         ...securedRequest.headers,
-        ...accessToken,
-      },
-    };
-  };
+        ...accessToken
+      }
+    }
+  }
 
   const getResponse = securedResponse => {
-    storeAccessToken(securedResponse);
+    storeAccessToken(securedResponse)
     // Implement Decryption Algo
     const response = {
-      ...securedResponse,
-    };
-    return response;
-  };
+      ...securedResponse
+    }
+    return response
+  }
 
   return {
     getSecureAuthRequest,
-    getResponse,
-  };
-};
+    getResponse
+  }
+}
 
-export default SecureRequest;
+export default SecureRequest

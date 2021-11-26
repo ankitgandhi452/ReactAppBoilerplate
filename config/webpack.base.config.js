@@ -445,7 +445,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
   target: 'web', // Make web variables accessible to webpack, e.g. window
   performance: options.performance || {},
   optimization: {
-    minimize: options.optimization.minimize,
+    minimize: false,
     minimizer: [
       // This is only used in production mode
       new TerserPlugin({
@@ -516,7 +516,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
       })
     ],
     // namedModules: true,
-    moduleIds: 'hashed', // it's the vendor hash we want to fix. with local changes the vendor id won't change
+    moduleIds: 'deterministic', // it's the vendor hash we want to fix. with local changes the vendor id won't change
     splitChunks: {
       cacheGroups: {
         default: false,

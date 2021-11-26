@@ -26,22 +26,17 @@ class Api {
     return request;
   };
 
-  static requestInterceptorError = error => {
-    return Promise.reject(error);
-  };
+  static requestInterceptorError = error => Promise.reject(error);
+
 
   static responseInterceptor = response => {
     const newResponse = Api.SecureRequest.getResponse(response);
     return newResponse;
   };
 
-  static responseInterceptorError = error => {
-    return Promise.reject(error);
-  };
+  static responseInterceptorError = error => Promise.reject(error);
 
-  fetch = (options, action) => {
-    return this.requestManager.request(options);
-  };
+  fetch = (options, action) => this.requestManager.request(options)
 
   errorHandling = (error, _action, _retries) => {
     if (!error.status) return false;
