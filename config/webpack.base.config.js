@@ -429,7 +429,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
       template: path.join(paths.appPath, '/version.ejs'),
       data: {
         buildAt: new Date().toISOString(),
-        environment: env.raw.NODE_ENV
+        buildEnv: env.raw.NODE_ENV
       }
     }),
     new LodashModuleReplacementPlugin({
