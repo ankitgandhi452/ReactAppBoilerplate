@@ -79,6 +79,16 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
         include: paths.appSrc
       },
       {
+        test: /\.(ts|tsx)$/,
+        enforce: 'pre',
+        use: [
+          {
+            loader: require.resolve('ts-loader')
+          }
+        ],
+        include: paths.appSrc
+      },
+      {
         // "oneOf" will traverse all following loaders until one will
         // match the requirements. When no loader matches it will fall
         // back to the "file" loader at the end of the loader list.
@@ -429,7 +439,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
   ],
   resolve: {
     modules: [paths.appSrc, 'node_modules'],
-    extensions: ['.js', '.jsx', '.scss', '.react.js'],
+    extensions: ['.js', '.jsx', '.scss', '.react.js','.ts', '.tsx'],
     mainFields: ['browser', 'module', 'main'],
     alias: {
       // Support React Native Web
