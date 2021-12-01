@@ -439,7 +439,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
   ],
   resolve: {
     modules: [paths.appSrc, 'node_modules'],
-    extensions: ['.js', '.jsx', '.scss', '.react.js','.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.scss', '.react.js', '.ts', '.tsx'],
     mainFields: ['browser', 'module', 'main'],
     alias: {
       // Support React Native Web
