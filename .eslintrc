@@ -9,7 +9,7 @@
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [".js", ".jsx"]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
     "no-console": 1,
@@ -32,7 +32,17 @@
     "no-bitwise": ["error", { "allow": ["~"] }],
     "import/no-extraneous-dependencies": [error, { "devDependencies": true }],
     "react/jsx-props-no-spreading": 0,
-    "arrow-body-style": 0
+    "arrow-body-style": 0,
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
   },
   "globals": {
     "window": true,
@@ -57,7 +67,7 @@
           ["components", "./src/components"],
           ["globals", "./src/globals"],
         ],
-        "extensions": [".js", ".jsx",  ".scss", ".react.js"],
+        "extensions": [".js", ".jsx",  ".scss", ".react.js", ".ts", ".tsx"]
       }
     }
   },

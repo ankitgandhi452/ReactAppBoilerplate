@@ -45,6 +45,9 @@
     "redux-persist-transform-compress": "4.2.0",
     "redux-persist-transform-encrypt": "^3.0.1",
     "redux-thunk": "2.3.0",
+    "source-map-loader": "^3.0.0",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.5.2",
     "webpack-version-file": "^0.1.6"
   },
   "devDependencies": {
@@ -109,7 +112,6 @@
     "robotstxt-webpack-plugin": "^7.0.0",
     "sass-loader": "^12.3.0",
     "scheduler": "^0.20.2",
-    "source-map-explorer": "^2.5.2",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.2.5",
     "uglify-js": "^3.14.3",
@@ -120,7 +122,11 @@
     "webpack-dev-server": "^3.11.3",
     "webpack-hot-middleware": "^2.25.1",
     "webpack-manifest-plugin": "^4.0.2",
-    "workbox-webpack-plugin": "^6.4.1"
+    "workbox-webpack-plugin": "^6.4.1",
+    "@types/jest": "^27.0.3",
+    "@types/node": "^16.11.11",
+    "@types/react": "^17.0.37",
+    "@types/react-dom": "^17.0.11"
   },
   "browserslist": {
     "production": [
