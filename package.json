@@ -25,8 +25,17 @@
       "git add"
     ]
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "React",
+    "React Router",
+    "Redux",
+    "Thunk",
+    "Linter",
+    "ESLinter",
+    "Analyze",
+    "Boilerplate"
+  ],
+  "author": "Ankit Gandhi <ankitgandhi452@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.16.0",
