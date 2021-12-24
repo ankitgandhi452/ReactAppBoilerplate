@@ -8,7 +8,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin')
 const RobotstxtPlugin = require('robotstxt-webpack-plugin')
 const paths = require('./paths')
-// const webpack = require('webpack')
+const webpack = require('webpack')
 
 module.exports = require('./webpack.base.config')({
   mode: 'production',
@@ -30,6 +30,7 @@ module.exports = require('./webpack.base.config')({
       filename: '[name].[contenthash:8].css',
       chunkFilename: '[name].[contenthash:8].chunk.css'
     }),
+    new webpack.optimize.AggressiveMergingPlugin({}),
     // new WorkboxWebpackPlugin.GenerateSW({
     //   clientsClaim: true,
     //   exclude: [/\.map$/, /asset-manifest\.json$/],

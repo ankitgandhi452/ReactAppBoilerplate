@@ -1,13 +1,11 @@
 /**
  * DEVELOPMENT WEBPACK CONFIGURATION
  */
-
-const path = require('path')
 const webpack = require('webpack')
 const CircularDependencyPlugin = require('circular-dependency-plugin')
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent')
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin')
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin')
+const DashboardPlugin = require("webpack-dashboard/plugin");
 const paths = require('./paths')
 
 const baseWebPackFunc = require('./webpack.base.config')
@@ -15,11 +13,9 @@ const baseWebPackFunc = require('./webpack.base.config')
 module.exports = baseWebPackFunc({
   mode: 'development',
   // Add hot reloading in development
-  entry: [
-    'eventsource-polyfill', // Necessary for hot reloading with IE
-    'webpack-hot-middleware/client?reload=true',
-    paths.appIndexJs
-  ],
+  entry: {
+    main: paths.appIndexJs
+  },
 
   // Don't use hashes in dev mode for better performance
   output: {
@@ -29,8 +25,8 @@ module.exports = baseWebPackFunc({
 
   // Add development plugins
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), // Tell webpack we want hot reloading
-    new CaseSensitivePathsPlugin(),
+    new DashboardPlugin(),
+    // new webpack.HotModuleReplacementPlugin({}),
     // If you require a missing module and then `npm install` it, you still have
     // to restart the development server for Webpack to discover it. This plugin
     // makes the discovery automatic so you don't have to restart.
@@ -44,7 +40,7 @@ module.exports = baseWebPackFunc({
 
   // Emit a source map for easier debugging
   // See https://webpack.js.org/configuration/devtool/#devtool
-  devtool: 'eval-source-map',
+  devtool: 'inline-source-map',
 
   performance: {
     hints: false
@@ -59,8 +55,9 @@ module.exports = baseWebPackFunc({
   cssModuleOptions: {
     importLoaders: 1, // No of loaders before css-loder
     sourceMap: false,
-    modules: true,
-    getLocalIdent: getCSSModuleLocalIdent // ou can also specify the absolute path to your custom getLocalIdent function to generate classname based on a different schema. By default we use built-in function to generate a classname.
+    modules: {
+      getLocalIdent: getCSSModuleLocalIdent,
+    } // ou can also specify the absolute path to your custom getLocalIdent function to generate classname based on a different schema. By default we use built-in function to generate a classname.
   },
   sassOptions: {
     importLoaders: 2, // No of loaders before css-loder
@@ -69,8 +66,9 @@ module.exports = baseWebPackFunc({
   sassModuleOptions: {
     importLoaders: 2, // No of loaders before css-loder
     sourceMap: false,
-    modules: true,
-    getLocalIdent: getCSSModuleLocalIdent // ou can also specify the absolute path to your custom getLocalIdent function to generate classname based on a different schema. By default we use built-in function to generate a classname.
+    modules: {
+      getLocalIdent: getCSSModuleLocalIdent,
+    } // ou can also specify the absolute path to your custom getLocalIdent function to generate classname based on a different schema. By default we use built-in function to generate a classname.
   },
   sassSourceMap: false,
   cssSourceMap: false,

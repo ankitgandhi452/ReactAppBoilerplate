@@ -16,6 +16,8 @@ const PostcssFlexbugsFixes = require('postcss-flexbugs-fixes')
 const PostcssPresetEnv = require('postcss-preset-env')
 const path = require('path')
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const ESLintPlugin = require('eslint-webpack-plugin');
 const getClientEnvironment = require('./env')
 const paths = require('./paths')
 
@@ -33,6 +35,22 @@ const sassModuleRegex = /\.module\.(scss|sass)$/
 const env = getClientEnvironment('/')
 
 process.noDeprecation = true
+
+const reactCacheGroup = ['react', 'react-dom']
+const reduxCacheGroup = ['redux', 'react-redux', 'redux-thunk', 'redux-devtools-extension', 'redux-persist', 'redux-persist-transform-compress', 'redux-persist-transform-encrypt']
+const excludeInCommon = []
+
+function areSamePackages (packages, modulePath) {
+  let includesInPackages = false
+  for (const packageName of packages) {
+    includesInPackages = modulePath.includes(`${path.sep}${packageName}${path.sep}`)
+    if (includesInPackages) {
+      break
+    }
+  }
+
+  return includesInPackages
+}
 
 module.exports = (options = { optimization: { minimize: false } }) => ({
   stats: {
@@ -66,24 +84,15 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
   }, // Merge with env dependent settings
   module: {
     rules: [
-      // First, run the linter.
-      // It's important to do this before Babel processes the JS.
-      {
-        test: /\.(js|jsx)$/,
-        enforce: 'pre',
-        use: [
-          {
-            loader: require.resolve('eslint-loader')
-          }
-        ],
-        include: paths.appSrc
-      },
       {
         test: /\.(ts|tsx)$/,
         enforce: 'pre',
         use: [
           {
-            loader: require.resolve('ts-loader')
+            loader: require.resolve('ts-loader'),
+            options: {
+              transpileOnly: true
+            }
           }
         ],
         include: paths.appSrc
@@ -93,60 +102,19 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
         // match the requirements. When no loader matches it will fall
         // back to the "file" loader at the end of the loader list.
         oneOf: [
-          // "url" loader works like "file" loader except that it embeds assets
-          // smaller than specified limit in bytes as data URLs to avoid requests.
-          // A missing `test` is equivalent to a match.
-          {
-            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
-            loader: require.resolve('url-loader'),
-            options: {
-              limit: imageInlineSizeLimit
-            }
-          },
-
           // Process application JS with Babel.
           // The preset includes JSX, Flow, TypeScript, and some ESnext features.
           {
             test: /\.(js|jsx)$/,
-            include: paths.appSrc,
+            exclude: /node_modules/,
             loader: require.resolve('babel-loader'),
             options: {
-              customize: require.resolve(
-                'babel-preset-react-app/webpack-overrides'
-              ),
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
               // directory for faster rebuilds.
               cacheDirectory: true,
               cacheCompression: true,
               compact: true
-            }
-          },
-
-          // Process any JS outside of the app with Babel.
-          // Unlike the application JS, we only compile the standard ES features.
-          {
-            test: /\.(js|mjs)$/,
-            exclude: /@babel(?:\/|\\{1,2})runtime/,
-            loader: require.resolve('babel-loader'),
-            options: {
-              babelrc: false,
-              configFile: false,
-              compact: false,
-              presets: [
-                [
-                  require.resolve('babel-preset-react-app/dependencies'),
-                  { helpers: true }
-                ]
-              ],
-              cacheDirectory: true,
-              cacheCompression: true,
-
-              // If an error happens in a package, it's possible to be
-              // because it was compiled. Thus, we don't want the browser
-              // debugger to show the original code. Instead, the code
-              // being evaluated would be much more helpful.
-              sourceMaps: false
             }
           },
           // "postcss" loader applies autoprefixer to our CSS.
@@ -344,6 +312,17 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
             ])
           },
 
+          // "url" loader works like "file" loader except that it embeds assets
+          // smaller than specified limit in bytes as data URLs to avoid requests.
+          // A missing `test` is equivalent to a match.
+          {
+            test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+            loader: require.resolve('url-loader'),
+            options: {
+              limit: imageInlineSizeLimit
+            }
+          },
+
           // "file" loader makes sure those assets get served by WebpackDevServer.
           // When you `import` an asset, you get its (virtual) filename.
           // In production, they would get copied to the `build` folder.
@@ -366,6 +345,14 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
     ]
   },
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
+
+    new ESLintPlugin({
+      context: '../',
+      extensions: ['ts', 'tsx', 'js', 'jsx'],
+      threads: false
+    }),
+
     // Generates an `index.html` file with the <script> injected.
     new HtmlWebpackPlugin({
       inject: true,
@@ -388,22 +375,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
     // during a production build.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
-    // new webpack.optimize.OccurrenceOrderPlugin(),
-    // new webpack.NamedChunksPlugin(
-    //   chunk =>
-    //     chunk.name ||
-    //     chunk.mapModules(m => path.basename(m.request, '.jsx')).join('_'),
-    // ),
     ...options.plugins,
-    new webpack.optimize.AggressiveMergingPlugin({}),
-    // A webpack plugin for naming on-demand chunks generated by System.import() or import().
-    // Atempts to guess the chunk name by parsing the requested filename.
-    // new webpack.NamedChunksPlugin(
-    //   chunk =>
-    //     chunk.name ||
-    //     chunk.mapModules(m => path.basename(m.request, '.jsx')).join('_')
-    // ),
-    // new AsyncChunkNames(),
     // Generate a manifest file which contains a mapping of all asset filenames
     // to their corresponding output file so that tools can pick it up without
     // having to parse `index.html`.
@@ -439,7 +411,7 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
   ],
   resolve: {
     modules: [paths.appSrc, 'node_modules'],
-    extensions: ['.js', '.jsx', '.scss', '.react.js', '.ts', '.tsx'],
+    extensions: ['.js', '.jsx', '.scss', '.ts', '.tsx'],
     mainFields: ['browser', 'module', 'main'],
     alias: {
       // Support React Native Web
@@ -525,30 +497,55 @@ module.exports = (options = { optimization: { minimize: false } }) => ({
         }
       })
     ],
-    // namedModules: true,
-    moduleIds: 'deterministic', // it's the vendor hash we want to fix. with local changes the vendor id won't change
-    splitChunks: {
-      cacheGroups: {
-        default: false,
-        vendors: false,
-        // vendor chunk
-        vendor: {
-          // sync + async chunks
-          chunks: 'all',
-          // import file path containing node_modules
-          test: /node_modules/,
 
-          // priority
-          priority: 20
+    splitChunks: {
+      // include all types of chunks. it means that chunks can be shared even between async and non-async chunks.
+      chunks: 'all',
+
+      // Minimum number of chunks that must share a module before splitting.
+      minChunks: 1,
+
+      hidePathInfo: true,
+
+      cacheGroups: {
+        react: {
+          test (module, chunk) {
+            const packages = reactCacheGroup
+            const modulePath = module.resource
+            return module.resource && areSamePackages(packages, modulePath)
+          },
+          minSize: 1,
+          priority: -1,
+          name: false,
+          idHint: 'react',
+          chunks: 'all'
         },
-        // common chunk
-        common: {
-          name: 'common',
-          minChunks: 2,
-          chunks: 'async',
-          priority: 10,
-          reuseExistingChunk: true,
-          enforce: true
+        redux: {
+          test (module, chunk) {
+            const packages = reduxCacheGroup
+            const modulePath = module.resource
+            return module.resource && areSamePackages(packages, modulePath)
+          },
+          minSize: 1,
+          priority: -2,
+          name: false,
+          idHint: 'redux',
+          chunks: 'all'
+        },
+        vendor: {
+          test (module, chunk) {
+            const packages = excludeInCommon
+            const modulePath = module.resource
+            return module.resource && !areSamePackages(packages, modulePath)
+          },
+          // Minimum number of chunks that must share a module before splitting.
+          // minChunks: 2,
+          minSize: 1,
+          maxSize: 250000,
+          priority: -3,
+          name: false,
+          idHint: 'vendors',
+          chunks: 'all'
         }
       }
     },

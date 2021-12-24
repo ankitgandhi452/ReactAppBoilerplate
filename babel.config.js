@@ -1,5 +1,5 @@
 
-function getConfig (api) {
+function getConfig(api) {
   api.cache(true)
 
   return {
@@ -17,9 +17,15 @@ function getConfig (api) {
         }
       ],
       '@babel/preset-react',
-      'react-app'
     ],
     plugins: [
+      [
+        "@babel/plugin-transform-runtime",
+        {
+          corejs: false,
+          "helpers": true
+        }
+      ],
       ['@babel/plugin-syntax-dynamic-import'],
       ['@babel/plugin-proposal-class-properties', { loose: true }],
       'lodash'
